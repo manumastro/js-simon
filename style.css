@@ -1,0 +1,30 @@
+body{
+  background-color: rgb(165, 207, 243);
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.main-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+h1#random-numbers{
+  font-size: 10vw;
+  color: whitesmoke;
+}
+
+h1#output{
+  font-size: 5vw;
+  text-align: center;
+}
+
+button{
+  border: none;
+  padding: 15px 50px;
+  border-radius: 10px;
+  font-size: 5vw;
+  cursor: pointer;
+  color: rgb(56, 106, 150);
+}
