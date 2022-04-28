@@ -1,96 +1,75 @@
-/*
-Visualizzare in pagina 5 numeri casuali. Da lì parte un timer di 5 secondi.
-Dopo 5 secondi l’utente deve inserire, uno alla volta, i numeri che ha visto precedentemente, tramite il prompt().
-Dopo che sono stati inseriti i 5 numeri, il software dice quanti e quali dei numeri da indovinare sono stati individuati.
-*/
-
-let randomNumbers = document.getElementById('random-numbers');
-let outputResult = document.getElementById('output');
-const buttonWrapper = document.querySelector('.button-wrapper');
-document.querySelector('button').addEventListener('click', play);
-
-let random = [];
+let secondsToWait = 5;
+const totalNumbers = 5;
+const randomNumbers = [];
 
 
-function play(){
-  reset();
-  generateRandomNum();
-  showNumbers();
-  timer();
-  checkNumbers();
+/**************************FUNCTIONS***************************/
+const getRandomNumbers = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
+const printMessages = (message, numbers) =>{
+  document.getElementById('message').innerHTML = message;
+  document.getElementById('numbers').innerHTML = numbers;
 }
 
-function generateRandomNum(){
-  while(random.length < 5){
-    let randomNum = randomFunction(1, 100);
-    if(!random.includes(randomNum)){
-      random.push(randomNum);
+const getUserNumbers = () => {
+  const numbers = [];
+  while(numbers.length < totalNumbers){
+    const newNumber = parseInt(prompt('Inserirsci un numero'));
+    if(!numbers.includes(newNumber)){
+      numbers.push(newNumber)
+    }else{
+      alert('Numero già inserito!');
     }
   }
-  return random;
-}
-function randomFunction(min, max){
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
+  return numbers;
 }
 
-function showNumbers(){
-  console.log(random);
-  let i = 0;
-  randomNumbers.innerHTML = random[i];
-  i++;
-  const flag = setInterval(function(){
-    randomNumbers.innerHTML = random[i];
-    console.log(random[i]);
-    i++;
-    if(i > 4){
-      clearInterval(flag);
+const getGuessedNumbers = (numbersToCheck) =>{
+  const guessedNumbers = [];
+
+  for(let i = 0; i < randomNumbers.length; i++){
+    if(numbersToCheck.includes(randomNumbers[i])){
+      guessedNumbers.push(randomNumbers[i]);
     }
-  },2000)
-}
+  }
 
-function timer(){
-  setTimeout(function (){
-    let n = 5;
-    const flag = setInterval(function(){
-    randomNumbers.style.color = 'black';
-    randomNumbers.innerHTML = n;
-    n--;
-    if(n < 1){
-      clearInterval(flag);
-    }
-  },1000)
-  },10000)
-}
-
-function checkNumbers(){
-  let inputN = [];
-  let i = 1;
-  setTimeout(function (){
-    while(i < 6){
-      num = parseInt(prompt('Inserire il numero'));
-      if(!isNaN(num)){
-        for(let i = 0; i < random.length; i++){
-          if(num === random[i]){
-            inputN.push(num);
-          }
-        }
-      }else{
-        alert('Il valore inserito non è un numero');
-        i--;
-      }
-      i++;
-    }
-    console.log(inputN);
-    randomNumbers.innerHTML = '';
-    outputResult.innerHTML = 
-      `I numeri indovinati sono ${inputN.length} <br>
-       e sono ${inputN}`;
-  }, 17000)
-}
-
-function reset(){
-  buttonWrapper.innerHTML = '';
+  return guessedNumbers;
 }
 
 
+/***************************TIMING FUNCTION*********************************/
+const countDown = setInterval(function(){
+  printMessages(`Hai ${--secondsToWait} secondi per indovinare i seguenti numeri`, randomNumbers);
+},1000)
 
+setTimeout(function(){
+  clearInterval(countDown);
+  printMessages('Te li ricordi tutti?', '');
+}, secondsToWait * 1000)
+
+setTimeout(function(){
+  printMessages("Scrivi tutti i numeri", '');
+
+  const userNumbers = getUserNumbers();
+
+  const guessedNumbers = getGuessedNumbers(userNumbers);
+
+  if(!guessedNumbers.length === 0){
+    printMessages('Non hai indovinato nulla!!', '');
+  }else{
+    printMessages(`Hai indovinato ${guessedNumbers.length} numeri su ${totalNumbers}`, guessedNumbers)
+  }
+
+}, (secondsToWait + 1) * 1000)
+
+
+//**************************START************************//
+while(randomNumbers.length < totalNumbers){
+  const newRandomNumber = getRandomNumbers(1, 100);
+  if(!randomNumbers.includes(randomNumbers)){
+    randomNumbers.push(newRandomNumber);
+  }
+}
+console.log(randomNumbers);
+
+printMessages(`Hai ${secondsToWait} secondi per indovinare i seguenti numeri`, randomNumbers);

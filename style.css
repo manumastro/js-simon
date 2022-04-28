@@ -4,19 +4,15 @@ body{
 }
 
 .main-wrapper{
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
-h1#random-numbers{
-  font-size: 10vw;
-  color: whitesmoke;
-}
 
-h1#output{
-  font-size: 5vw;
+h3{
   text-align: center;
 }
 
